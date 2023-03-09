@@ -1,4 +1,4 @@
-module mgqmgo
+module github.com/maczh/mgqmgo
 
 go 1.19
 
