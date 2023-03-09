@@ -14,7 +14,7 @@ type MgoDao[E any] struct {
 }
 
 // Insert mongo动态插入数据
-func (m *MgoDao[E]) Insert(entity *E) error {
+func (m MgoDao[E]) Insert(entity *E) error {
 	if m.CollectionName == "" {
 		return errors.New("CollectionName未定义")
 	}
@@ -32,7 +32,7 @@ func (m *MgoDao[E]) Insert(entity *E) error {
 }
 
 // Delete mongo动态删除数据
-func (m *MgoDao[E]) Delete(query bson.M) error {
+func (m MgoDao[E]) Delete(query bson.M) error {
 	if m.CollectionName == "" {
 		return errors.New("CollectionName未定义")
 	}
@@ -50,7 +50,7 @@ func (m *MgoDao[E]) Delete(query bson.M) error {
 }
 
 // Updates mongo动态更新数据
-func (m *MgoDao[E]) Updates(id primitive.ObjectID, fields bson.M) error {
+func (m MgoDao[E]) Updates(id primitive.ObjectID, fields bson.M) error {
 	if m.CollectionName == "" {
 		return errors.New("CollectionName未定义")
 	}
@@ -68,7 +68,7 @@ func (m *MgoDao[E]) Updates(id primitive.ObjectID, fields bson.M) error {
 }
 
 // All mongo动态查询数据
-func (m *MgoDao[E]) All(query bson.M) ([]E, error) {
+func (m MgoDao[E]) All(query bson.M) ([]E, error) {
 	if m.CollectionName == "" {
 		return nil, errors.New("CollectionName未定义")
 	}
@@ -88,7 +88,7 @@ func (m *MgoDao[E]) All(query bson.M) ([]E, error) {
 }
 
 // One mongo动态查询一条数据
-func (m *MgoDao[E]) One(query bson.M) (*E, error) {
+func (m MgoDao[E]) One(query bson.M) (*E, error) {
 	if m.CollectionName == "" {
 		return nil, errors.New("CollectionName未定义")
 	}
@@ -117,7 +117,7 @@ type ResultPage struct {
 }
 
 // Pager mongo简单分页查询数据
-func (m *MgoDao[E]) Pager(query bson.M, sort []string, page, size int) ([]E, *ResultPage, error) {
+func (m MgoDao[E]) Pager(query bson.M, sort []string, page, size int) ([]E, *ResultPage, error) {
 	if m.CollectionName == "" {
 		return nil, nil, errors.New("CollectionName未定义")
 	}
