@@ -113,21 +113,21 @@ func (c *Collection) RemoveAll(selector interface{}) (*qmgo.DeleteResult, error)
 }
 
 func (c *Collection) Update(selector interface{}, update interface{}) error {
-	return c.col.UpdateOne(c.ctx, selector, update)
+	return c.col.UpdateOne(c.ctx, selector, bson.M{"$set": update})
 }
 
 func (c *Collection) UpdateAll(selector interface{}, update interface{}) (*qmgo.UpdateResult, error) {
-	return c.col.UpdateAll(c.ctx, selector, update)
+	return c.col.UpdateAll(c.ctx, selector, bson.M{"$set": update})
 }
 
 func (c *Collection) UpdateId(id interface{}, update interface{}) error {
-	return c.col.UpdateId(c.ctx, id, update)
+	return c.col.UpdateId(c.ctx, id, bson.M{"$set": update})
 }
 
 func (c *Collection) Upsert(selector interface{}, update interface{}) (*qmgo.UpdateResult, error) {
-	return c.col.Upsert(c.ctx, selector, update)
+	return c.col.Upsert(c.ctx, selector, bson.M{"$set": update})
 }
 
 func (c *Collection) UpsertId(id interface{}, update interface{}) (*qmgo.UpdateResult, error) {
-	return c.col.UpsertId(c.ctx, id, update)
+	return c.col.UpsertId(c.ctx, id, bson.M{"$set": update})
 }

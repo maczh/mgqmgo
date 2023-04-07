@@ -50,7 +50,7 @@ func (m MgoDao[E]) Delete(query bson.M) error {
 }
 
 // Updates mongo动态更新数据
-func (m MgoDao[E]) Updates(id primitive.ObjectID, fields bson.M) error {
+func (m MgoDao[E]) Updates(id primitive.ObjectID, entity *E) error {
 	if m.CollectionName == "" {
 		return errors.New("CollectionName未定义")
 	}
@@ -59,7 +59,7 @@ func (m MgoDao[E]) Updates(id primitive.ObjectID, fields bson.M) error {
 		logger.Error("数据库连接失败: " + err.Error())
 		return errors.New("数据库连接失败")
 	}
-	err = conn.C(m.CollectionName).UpdateId(id, fields)
+	err = conn.C(m.CollectionName).UpdateId(id, entity)
 	if err != nil {
 		logger.Error("数据库更新失败: " + err.Error())
 		return errors.New("数据库更新失败")
@@ -132,19 +132,19 @@ func (m MgoDao[E]) Pager(query bson.M, sort []string, page, size int) ([]E, *Res
 		size = 20
 	}
 	var result = make([]E, 0)
-	var count int
+	var count int64
 	var p = ResultPage{
 		Index: page,
 		Size:  size,
 	}
-	count, err = conn.C(m.CollectionName).Count()
+	count, err = conn.C(m.CollectionName).Find(query).Count()
 	if err != nil {
 		logger.Error("数据库查询失败: " + err.Error())
 		return nil, nil, errors.New("数据库查询失败")
 	}
-	p.Total = count
-	p.Count = (count / size) + 1
-	if count == 0 || count < (page-1)*size {
+	p.Total = int(count)
+	p.Count = (int(count) / size) + 1
+	if count == 0 || int(count) < (page-1)*size {
 		return result, &p, err
 	}
 	q := conn.C(m.CollectionName).Find(query)
